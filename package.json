@@ -1,0 +1,23 @@
+{
+  "name": "linux-apps-cache",
+  "version": "1.0.0",
+  "description": "A .desktop files parser that caches all apps installed in your machine.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/m0n0l0c0/linux-apps-cache.git"
+  },
+  "author": "m0n0l0c0 (https://github.com/m0n0l0c0)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/m0n0l0c0/linux-apps-cache/issues"
+  },
+  "homepage": "https://github.com/m0n0l0c0/linux-apps-cache#readme",
+  "dependencies": {
+    "lodash": "*",
+    "glob": "*"
+  }
+}
