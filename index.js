@@ -35,8 +35,8 @@ const scanApps = (callback) => getAppsList().then(apps => {
   callback = noop(callback)
   const json = JSON.stringify(apps, null, 2)
   fs.writeFile(CACHE_FILE, json, cacheOptions, (err) => {
-    if (err) console.log('Error writing apps cache file')
-    callback(apps)
+    if (err) callback(err)
+    else callback(null, apps)
   })
 })
 
@@ -47,7 +47,7 @@ module.exports.init = (callback) => {
       scanApps(callback)
     } else {
       fs.readFile(CACHE_FILE, cacheOptions, (err, json) => {
-        if (!err) callback(JSON.parse(json))
+        if (!err) callback(null, JSON.parse(json))
         else callback(err)
       })
     }
