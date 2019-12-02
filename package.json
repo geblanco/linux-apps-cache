@@ -1,6 +1,6 @@
 {
   "name": "linux-apps-cache",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A .desktop files parser that caches all apps installed in your machine.",
   "main": "index.js",
   "scripts": {

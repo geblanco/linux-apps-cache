@@ -5,6 +5,7 @@ const fs = require('fs')
 const { flatten, uniq } = require('lodash')
 const { DIRECTORIES, PATTERNS, EXTENSIONS, formatPath,  } = require(path.join(__dirname || './', 'linux'))
 
+// Every 30 minutes
 const REINDEX_TIME = 30 * 60 * 1000
 const CACHE_FILE = path.join(process.env.HOME, '.config', 'apps_cache.json')
 const cacheOptions = { encoding: 'utf-8' }
@@ -40,10 +41,10 @@ const scanApps = (callback) => getAppsList().then(apps => {
   })
 })
 
-module.exports.init = (callback) => {
+module.exports.init = (ignoreCache=false, callback=()=>{}, reindexCallback=()=>{}) => {
   callback = noop(callback)
   fs.exists(CACHE_FILE, (exists) => {
-    if (!exists){
+    if (!exists || ignoreCache){
       scanApps(callback)
     } else {
       fs.readFile(CACHE_FILE, cacheOptions, (err, json) => {
@@ -53,8 +54,11 @@ module.exports.init = (callback) => {
     }
   })
 
-  setInterval(scanApps, REINDEX_TIME)
-  DIRECTORIES.forEach(dir => fs.watch(dir, {}, scanApps))
+  setInterval(scanApps.bind(null, reindexCallback), REINDEX_TIME)
+  DIRECTORIES.forEach(dir => fs.watch(dir, {}, scanApps.bind(null, reindexCallback)))
 }
 
+module.exports.setWatchCallback = (callback) => {
+  DIRECTORIES.forEach(dir => fs.watch(dir, {}, scanApps.bind(null, callback) ))
+}
 module.exports.scanApps = scanApps
