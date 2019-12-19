@@ -3,7 +3,7 @@ const glob = require('glob')
 const path = require('path')
 const fs = require('fs')
 const { flatten, uniq } = require('lodash')
-const { DIRECTORIES, PATTERNS, EXTENSIONS, formatPath,  } = require(path.join(__dirname || './', 'linux'))
+const { DIRECTORIES, PATTERNS, EXTENSIONS, formatPath, addThemeForIconLookup } = require(path.join(__dirname || './', 'linux'))
 
 // Every 30 minutes
 const REINDEX_TIME = 30 * 60 * 1000
@@ -40,6 +40,8 @@ const scanApps = (callback) => getAppsList().then(apps => {
     else callback(null, apps)
   })
 })
+
+module.exports.addThemeForIconLookup = addThemeForIconLookup
 
 module.exports.init = (ignoreCache=false, callback=()=>{}, reindexCallback=()=>{}) => {
   callback = noop(callback)

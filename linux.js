@@ -49,7 +49,7 @@ const iconResolutions = [
 ]
 
 // Directories when we are trying to find an icon
-const iconDirs = uniq(flatten([
+let iconDirs = uniq(flatten([
   ...iconResolutions.map(resolution => (
     appDirs.map(dir => path.join(dir, 'icons', 'hicolor', resolution, 'apps'))
   )),
@@ -61,6 +61,19 @@ const iconExtension = [
   'svg',
   'png'
 ]
+
+module.exports.addThemeForIconLookup = (themeDir) => {
+  if (!path.isAbsolute(themeDir)) {
+    themeDir = uniq(flatten([
+      ...iconResolutions.map(resolution => (
+        appDirs.map(dir => path.join(dir, 'icons', themeDir, 'apps', resolution))
+      ))
+    ])).filter(fs.existsSync)
+  } else {
+    themeDir = [ themeDir ]
+  }
+  iconDirs = [ ...iconDirs, ...themeDir ]
+}
 
 module.exports.PATTERNS = []
 
