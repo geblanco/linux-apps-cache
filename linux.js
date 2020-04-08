@@ -63,7 +63,7 @@ const iconExtension = [
 ]
 
 // Sort icons according to this parameter
-const order = 'png'
+const order = ['.png', '.svg']
 
 module.exports.addThemeForIconLookup = (themeDir) => {
   if (!path.isAbsolute(themeDir)) {
@@ -119,10 +119,14 @@ const getId = (filePath) => {
 
 const sortIcons = (ic1, ic2) => {
   let ret = 0
-  if( path.extname(ic1).indexOf(order) != -1 ){
-    ret = -1
-  }else if( path.extname(ic2).indexOf(order) != -1 ){
+  let ic1Index = order.indexOf(path.extname(ic1))
+  let ic2Index = order.indexOf(path.extname(ic2))
+  if (ic1Index == -1) {
     ret = 1
+  }else if (ic2Index == -1) {
+    ret = -1
+  }else{
+    ret = ic1Index - ic2Index
   }
   return ret
 }
