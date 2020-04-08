@@ -62,6 +62,9 @@ const iconExtension = [
   'png'
 ]
 
+// Sort icons according to this parameter
+const order = 'png'
+
 module.exports.addThemeForIconLookup = (themeDir) => {
   if (!path.isAbsolute(themeDir)) {
     themeDir = uniq(flatten([
@@ -114,13 +117,23 @@ const getId = (filePath) => {
   return match ? match[1] : filePath
 }
 
+const sortIcons = (ic1, ic2) => {
+  let ret = 0
+  if( path.extname(ic1).indexOf(order) != -1 ){
+    ret = -1
+  }else if( path.extname(ic2).indexOf(order) != -1 ){
+    ret = 1
+  }
+  return ret
+}
+
 const findIcon = (icon) => {
   if (path.isAbsolute(icon)) {
     return icon
   }
   return flatten(iconExtension.map(ext =>
     iconDirs.map(dir => path.join(dir, `${icon}.${ext}`))
-  )).find(fs.existsSync)
+  )).filter(fs.existsSync).sort(sortIcons).find(() => true)
 }
 
 module.exports.toString = ({ name, exec }) => {
@@ -151,3 +164,5 @@ module.exports.formatPath = (filePath) => {
     path: filePath
   }
 }
+
+module.exports.iconDirs = () => iconDirs
