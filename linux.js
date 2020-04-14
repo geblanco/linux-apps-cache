@@ -45,7 +45,12 @@ const iconResolutions = [
   '24x24',
   '22x22',
   '20x20',
-  '16x16'
+  '16x16',
+  '48',
+  '40',
+  '32',
+  '24',
+  '16'
 ]
 
 // Directories when we are trying to find an icon
@@ -67,9 +72,13 @@ const order = ['.png', '.svg']
 
 module.exports.addThemeForIconLookup = (themeDir) => {
   if (!path.isAbsolute(themeDir)) {
+    // some themes store data like Theme/apps/resolution, other as Theme/resolution/apps...
     themeDir = uniq(flatten([
       ...iconResolutions.map(resolution => (
         appDirs.map(dir => path.join(dir, 'icons', themeDir, 'apps', resolution))
+      )),
+      ...iconResolutions.map(resolution => (
+        appDirs.map(dir => path.join(dir, 'icons', themeDir, resolution, 'apps'))
       ))
     ])).filter(fs.existsSync)
   } else {
